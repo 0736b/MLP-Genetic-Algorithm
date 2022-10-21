@@ -40,18 +40,33 @@ class MLP:
                     prev_layer_output = o_from_hidden
 
     def calc_error(self, desired_output: list):
-        error = 0.0
+        error = 0
         for i in range(len(self.layers['OUTPUT_LAYER'])):
             error += np.power((self.layers['OUTPUT_LAYER'][i].get_output() - desired_output[i]),2)
-        return error
+        return error, desired_output
     
     def run(self, dataset):
-        sse = []
+        sse = 0.0
         for train_data in dataset:
             self.forward_pass(train_data['INPUT'])
-            error = self.calc_error(train_data['OUTPUT'])
-            sse.append(error)
-        return 1/(1+np.average(sse))
+            error, desired_output = self.calc_error(train_data['OUTPUT'])
+            sse += error
+        mse = sse / len(dataset)
+        return mse
+    
+    def run_show(self, dataset):
+        sse = 0.0
+        acc = 0.0
+        for train_data in dataset:
+            self.forward_pass(train_data['INPUT'])
+            error,desired_output = self.calc_error(train_data['OUTPUT'])
+            sse = sse + error
+            print('actual_output:',self.layers['OUTPUT_LAYER'][0].get_output(), 'desired_output:', desired_output)
+            if self.layers['OUTPUT_LAYER'][0].get_output() == desired_output[0]:
+                acc += 1
+        mse = sse / len(dataset)
+        acc = (acc / len(dataset)) * 100
+        return mse,acc
     
     def get_chromosome(self):
         chromosome = []
@@ -67,6 +82,7 @@ class MLP:
     
     def set_new_weights(self, chromosome: list):
         linear_chromosome = chromosome.copy()
+        print('UPDATE WITH', linear_chromosome)
         for layer, neurons in self.layers.items():
             if 'HIDDEN_LAYER' in layer or 'OUTPUT_LAYER' in layer:
                 for neuron in neurons:

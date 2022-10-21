@@ -3,6 +3,11 @@ __pycache__/
 *.py[cod]
 *$py.class
 bak/
+og/
+test_mlp.py
+test_og.py
+test_xor.py
+xor.data
 log.txt
 # C extensions
 *.so

@@ -1,10 +1,14 @@
 import numpy as np
+from functools import lru_cache
 
 def step(x):
     return np.where(x>0, 1,0)
 
 def sigmoid(x):
     return 1/(1+np.e**(-x))
+
+def tanh(x):
+    return np.tanh(x)
 
 class Neuron:
     
@@ -16,7 +20,7 @@ class Neuron:
             self.weights = np.array(np.random.uniform(-1.0,1.0,size=prev_layer_neurons)).reshape((prev_layer_neurons, 1))
         else:
             self.weights = []
-        self.bias = 1.0
+        self.bias = 0.0
     
     def set_input(self, _input: int):
         self.inp = _input
@@ -27,7 +31,7 @@ class Neuron:
         else:
             self.output = np.array(prev_layer_output)
             self.output = np.dot(self.output, self.weights)
-            self.output = sigmoid(self.output + self.bias)[0]
+            self.output = step(self.output + self.bias)[0]
         return self.output
     
     def get_output(self):
