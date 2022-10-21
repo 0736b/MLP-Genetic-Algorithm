@@ -1,6 +1,5 @@
 from copy import copy
 from mlp.mlp import MLP
-from functools import lru_cache
 import numpy as np
 
 import sys, os
@@ -77,10 +76,9 @@ class GA:
                     self.selected.append(self.population[j])
         print('@selection', self.selected, 'len:', len(self.selected))
     
-    lru_cache(maxsize=10)
     def crossover(self, t: int, mate_prob: float):
         # t-point crossver
-        self.intermediate_pop = self.selected.copy()
+        self.intermediate_pop = self.selected
         print('@crossover ประชากรกลาง', self.intermediate_pop, 'len:', len(self.intermediate_pop))
         self.mating_pool = []
         self.children = []
@@ -91,7 +89,7 @@ class GA:
                 parents_idx.add(self.intermediate_pop.index(pop))
                 self.mating_pool.append(pop)
         if len(self.mating_pool) % 2 != 0:
-            rand_num = np.random.uniform(0,1)
+            # rand_num = np.random.uniform(0,1)
             #random between add or remove
             # if rand_num > 0.5:
             #     select_idx = np.random.randint(0,len(self.mating_pool))
@@ -108,13 +106,13 @@ class GA:
             print('@crossover สุ่มค่า k', ks, 'len:', len(ks))
             # swap
             temp_dad = dad.copy()
-            temp_dad2 = dad.copy()
-            temp_mom = mom.copy()
+            # temp_dad2 = dad.copy()
+            # temp_mom = mom.copy()
             for k in ks:
-                temp_dad[k] = mom[k]
-                temp_mom[k] = temp_dad2[k]
-            self.children.append(temp_dad.copy())
-            self.children.append(temp_mom.copy())
+                dad[k] = mom[k]
+                mom[k] = temp_dad[k]
+            self.children.append(dad)
+            self.children.append(mom)
         print('@crossover ลูกที่ได้จากการจับคู่พ่อแม่', self.children, 'len:', len(self.children))
         t_intermediate_pop = []
         print('@crossover p1', self.intermediate_pop, 'len:', len(self.intermediate_pop))
@@ -144,7 +142,7 @@ class GA:
             p = MLP(self.layers_and_nodes)
             p.set_new_weights(c)
             next_gen.append(p)
-        self.population = next_gen.copy()
+        self.population = next_gen
         self.population.append(elitism)
         self.pop_size = len(self.population)
         self.current_gen += 1

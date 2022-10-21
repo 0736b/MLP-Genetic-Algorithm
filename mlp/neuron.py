@@ -1,5 +1,4 @@
 import numpy as np
-from functools import lru_cache
 
 def step(x):
     return np.where(x>0, 1,0)
@@ -38,7 +37,7 @@ class Neuron:
         return self.output
     
     def get_weights(self):
-        t_weights = self.weights.copy()
+        t_weights = self.weights
         t_weights = t_weights.reshape((1, self.prev_layer_neurons))
         return t_weights[0]
     
@@ -47,13 +46,3 @@ class Neuron:
     
     def update_weights(self, new_weight, pos):
         self.weights[pos] = new_weight
-    
-    def clear(self):
-        self.inp = 0.0
-        self.output = 0.0
-        self.bias = 1.0
-        
-if __name__ == '__main__':
-    n = Neuron(3)
-    print(n.weights)
-    print(n.get_weights())
