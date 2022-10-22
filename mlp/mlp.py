@@ -61,7 +61,7 @@ class MLP:
             self.forward_pass(train_data['INPUT'])
             error,desired_output = self.calc_error(train_data['OUTPUT'])
             sse = sse + error
-            print('actual_output:',self.layers['OUTPUT_LAYER'][0].get_output(), 'desired_output:', desired_output)
+            print('actual_output:',self.layers['OUTPUT_LAYER'][0].get_output(), 'desired_output:', desired_output[0])
             if self.layers['OUTPUT_LAYER'][0].get_output() == desired_output[0]:
                 acc += 1
         mse = sse / len(dataset)

@@ -29,6 +29,8 @@ class GA:
             fitness = 1 - fitness
             if fitness >= before_max_fit:
                 before_max_fit = fitness
+                self.max_fit = fitness
+                self.min_mse = 1 - fitness
                 best_model = mlp
             self.all_fitness.append(fitness)
             self.total_fitness += fitness
@@ -135,7 +137,6 @@ class GA:
         self.population = next_gen
         self.population.append(elitism)
         self.pop_size = len(self.population)
-        self.current_gen += 1
         
     def find_best(self):
         model = self.calc_fitness()
@@ -149,6 +150,7 @@ class GA:
             self.crossover(5, 0.8)
             self.mutation(0.1)
             self.next_gen(self.children, elitism)
-            print('curr_gen', self.current_gen, 'mse:', elitism.run(self.dataset))
+            print('Training @Gen', self.current_gen, 'MSE/ACC on best individual:', round(self.min_mse,4), '/',round(self.max_fit * 100, 4), 'AVG ACC of Population:', round((self.avg_fitness * 100),4))
+            self.current_gen += 1
         best = self.find_best()
-        return self.population, best 
+        return self.population, best
