@@ -82,7 +82,7 @@ class MLP:
     
     def set_new_weights(self, chromosome: list):
         linear_chromosome = chromosome
-        print('UPDATE WITH', linear_chromosome)
+        # print('UPDATE WITH', linear_chromosome)
         for layer, neurons in self.layers.items():
             if 'HIDDEN_LAYER' in layer or 'OUTPUT_LAYER' in layer:
                 for neuron in neurons:

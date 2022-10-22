@@ -3,12 +3,6 @@ import numpy as np
 def step(x):
     return np.where(x>0, 1,0)
 
-def sigmoid(x):
-    return 1/(1+np.e**(-x))
-
-def tanh(x):
-    return np.tanh(x)
-
 class Neuron:
     
     def __init__(self, prev_layer_neurons: int):
