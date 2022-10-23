@@ -5,6 +5,12 @@ import pandas as pd
 from utils.datareader import get_dataset, cross_valid
 
 def plt_err_trained(model, gen):
+    """plot graph between average mse and fittest mse every generations
+
+    Args:
+        model (str): model mlp
+        gen (int): max generation
+    """
     plt.figure(figsize = (20, 10))
     idx_gen = [int(i+1) for i in range(gen)]
     for i in range(10):
@@ -31,6 +37,13 @@ def plt_err_trained(model, gen):
     plt.show()
     
 def plt_cfm(color, mode, model):
+    """plot confusion matrix of training and validation
+
+    Args:
+        color (str): confusion matrix color
+        mode (str): training or validation
+        model (str): mlp model
+    """
     class_output = ['0', '1']   
     params = {
     'axes.titlesize': 16,
@@ -53,7 +66,7 @@ def plt_cfm(color, mode, model):
         with open(path_cfm, 'rb') as f_cfm:
             cfm = pickle.load(f_cfm)
         plt_cfm = cfm.get()
-        plt.subplot(2, 5, i+1)
+        ax = plt.subplot(2, 5, i+1)
         sns.heatmap(plt_cfm, annot=True, yticklabels=class_output, xticklabels=class_output, cmap=color, fmt='g')
         plt.xlabel('Predicted', fontweight='bold')
         plt.ylabel('Actual', fontweight='bold')
@@ -64,7 +77,8 @@ def plt_cfm(color, mode, model):
     plt.show() 
         
 if __name__ == '__main__':
-    max_gen = 10
-    plt_err_trained('30-4-1', max_gen)
-    plt_cfm('Blues', 'train', '30-4-1')
-    plt_cfm('YlOrBr', 'valid', '30-4-1')
+    max_gen = 100
+    model = '30-4-1'
+    plt_err_trained(model, max_gen)
+    plt_cfm('Blues', 'train', model)
+    plt_cfm('YlOrBr', 'valid', model)

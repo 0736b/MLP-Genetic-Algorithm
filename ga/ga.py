@@ -3,8 +3,17 @@ from mlp.mlp import MLP
 import numpy as np
 
 class GA:
-    
+    """Genetic Algorithm
+    """
     def __init__(self, pop_size: int, dataset, max_gen: int, layers_and_nodes: list):
+        """GA Initialize
+
+        Args:
+            pop_size (int): population size
+            dataset (list): dataset to train
+            max_gen (int): maximum generations
+            layers_and_nodes (list): layers and nodes for MLP model 
+        """
         self.pop_size = pop_size
         self.population = []
         self.dataset = dataset
@@ -15,6 +24,8 @@ class GA:
         self.layers_and_nodes = layers_and_nodes
 
     def init_population(self):
+        """initialize population with size of population
+        """
         self.population = []
         for i in range(self.pop_size):
             mlp = MLP(self.layers_and_nodes)
@@ -22,6 +33,11 @@ class GA:
         # print('now population', self.population)
     
     def calc_fitness(self):
+        """calculate fitness
+
+        Returns:
+            MLP: MLP that fittest
+        """
         self.total_fitness = 0
         self.all_fitness = []
         before_max_fit = -9999999
@@ -42,6 +58,8 @@ class GA:
         return copy(best_model)
     
     def selection(self):
+        """doing Selection with roulette wheel method
+        """
         # roulette wheel
         self.prob_pop = []
         self.expect_pop = []
@@ -72,6 +90,12 @@ class GA:
         # print('@selection', self.selected, 'len:', len(self.selected))
     
     def crossover(self, t: int, mate_prob: float):
+        """doing t-point Crossover
+
+        Args:
+            t (int): t-point
+            mate_prob (float): mating probability
+        """
         # t-point crossver
         self.intermediate_pop = self.selected
         # print('@crossover ประชากรกลาง', self.intermediate_pop, 'len:', len(self.intermediate_pop))
@@ -122,6 +146,11 @@ class GA:
         # print('@crossover ลูกเติมด้วย p1 ที่เหลือ', self.children, 'len:', len(self.children))
         
     def mutation(self, mutate_prob: float):
+        """doing Strong Mutation
+
+        Args:
+            mutate_prob (float): mutation probability
+        """
         # strong mutation
         # print('@mutate ก่อน',self.children, 'len', len(self.children))
         for child in self.children:
@@ -132,6 +161,12 @@ class GA:
         # print('@mutate หลัง',self.children, 'len', len(self.children))
     
     def next_gen(self, chromosome: list, elitism):
+        """set next generation GA parameter
+
+        Args:
+            chromosome (list): children and intermediate population chromosomes
+            elitism (MLP): send the fittest to next gen
+        """
         next_gen = []
         for c in chromosome:
             p = MLP(self.layers_and_nodes)
@@ -142,10 +177,20 @@ class GA:
         self.pop_size = len(self.population)
         
     def find_best(self):
+        """find the fittest
+
+        Returns:
+            MLP: MLP model with fittest individual
+        """
         model = self.calc_fitness()
         return copy(model)
     
     def run(self):
+        """trainning with genetic algorithm
+
+        Returns:
+            MLP: best MLP with fittest after trainning to max generation
+        """
         self.init_population()
         while(self.current_gen <= self.max_gen):
             elitism = self.calc_fitness()

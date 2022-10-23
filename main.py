@@ -5,16 +5,20 @@ import time
 import pickle
 
 def main():
+    """setups and running
+    """
     dataset = get_dataset('dataset/wdbc.data', norm=True)
     train_folds, test_folds = cross_valid(dataset)
     folds = 10
+    max_gen = 100
+    population = 20
     for i in range(folds):
         model = '30-4-1'
         cfm_train = ConfusionMatrix([0,1])
         cfm_valid = ConfusionMatrix([0,1])
         print('Fold:', (i+1), 'Training')
         st = time.time()
-        ga = GA(20, train_folds[i], 10, [30, 4, 1])
+        ga = GA(population, train_folds[i], max_gen, [30, 4, 1])
         best, log_mse_avg, log_mse_best = ga.run()
         et = time.time()
         elapsed_time = et - st

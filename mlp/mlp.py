@@ -2,8 +2,14 @@ import numpy as np
 from mlp.neuron import Neuron
 
 class MLP:
-    
+    """Multilayer Perceptron
+    """
     def __init__(self, layers_and_nodes: list):
+        """MLP Initialize
+
+        Args:
+            layers_and_nodes (list): list of layers and nodes
+        """
         self.layers = {}
         self.layers_and_nodes = layers_and_nodes
         self.sse = []
@@ -23,6 +29,11 @@ class MLP:
                 self.layers[key] = np.array(t_layers)
     
     def forward_pass(self, input_data: list):
+        """forward pass
+
+        Args:
+            input_data (list): list of input data
+        """
         if len(input_data) != len(self.layers['INPUT_LAYER']):
             print('input data not match input neurons')
             return
@@ -40,12 +51,28 @@ class MLP:
                     prev_layer_output = o_from_hidden
 
     def calc_error(self, desired_output: list):
+        """calculate error between predicted and desired
+
+        Args:
+            desired_output (list): desired output
+
+        Returns:
+            float: error
+        """
         error = 0
         for i in range(len(self.layers['OUTPUT_LAYER'])):
             error += np.power((self.layers['OUTPUT_LAYER'][i].get_output() - desired_output[i]),2)
         return error, desired_output
     
     def run(self, dataset):
+        """forward pass and calculate error
+
+        Args:
+            dataset (list): dataset
+
+        Returns:
+            float: mean square error after feed dataset of this model
+        """
         sse = 0.0
         for train_data in dataset:
             self.forward_pass(train_data['INPUT'])
@@ -55,6 +82,15 @@ class MLP:
         return mse
     
     def run_show(self, dataset, cfm):
+        """forward pass and calculate error with show result as confusion matrix
+
+        Args:
+            dataset (list): dataset
+            cfm (ConfusionMatrix): confusion matrix class
+
+        Returns:
+            float: mean square error and accuracy after feed dataset of this model
+        """
         sse = 0.0
         acc = 0.0
         for train_data in dataset:
@@ -70,6 +106,11 @@ class MLP:
         return mse,acc
     
     def get_chromosome(self):
+        """return weights of all neurons (chromosome)
+
+        Returns:
+            list: weights of all neurons (chromosome)
+        """
         chromosome = []
         for layer, neurons in self.layers.items():
             if 'HIDDEN_LAYER' in layer or 'OUTPUT_LAYER' in layer:
@@ -82,6 +123,11 @@ class MLP:
         return linear_chromosome
     
     def set_new_weights(self, chromosome: list):
+        """set new weights of all neurons (set new chromosome)
+
+        Args:
+            chromosome (list): new chromosome
+        """
         linear_chromosome = chromosome
         # print('UPDATE WITH', linear_chromosome)
         for layer, neurons in self.layers.items():
