@@ -10,6 +10,8 @@ class GA:
         self.dataset = dataset
         self.current_gen = 1
         self.max_gen = max_gen
+        self.log_mse_avg = []
+        self.log_mse_best = []
         self.layers_and_nodes = layers_and_nodes
 
     def init_population(self):
@@ -36,6 +38,7 @@ class GA:
             self.total_fitness += fitness
         # print('@calc_fitness',self.all_fitness, 'len:', len(self.all_fitness))
         self.avg_fitness = np.average(self.all_fitness)
+        self.avg_mse = 1 - self.avg_fitness
         return copy(best_model)
     
     def selection(self):
@@ -144,13 +147,15 @@ class GA:
     
     def run(self):
         self.init_population()
-        while(self.current_gen < self.max_gen):
+        while(self.current_gen <= self.max_gen):
             elitism = self.calc_fitness()
             self.selection()
             self.crossover(5, 0.8)
             self.mutation(0.1)
             self.next_gen(self.children, elitism)
-            print('Training @Gen', self.current_gen, 'MSE/ACC on best individual:', round(self.min_mse,4), '/',round(self.max_fit * 100, 4), 'AVG ACC of Population:', round((self.avg_fitness * 100),4))
+            print('Training @Gen', self.current_gen, 'MSE/ACC on best individual:', round(self.min_mse,4), '/',round(self.max_fit * 100, 4), 'AVG MSE of Population:', round((self.avg_mse),4))
+            self.log_mse_avg.append(self.avg_mse)
+            self.log_mse_best.append(self.min_mse)
             self.current_gen += 1
         best = self.find_best()
-        return self.population, best
+        return best, self.log_mse_avg, self.log_mse_best
