@@ -9,7 +9,6 @@ test_og.py
 test_xor.py
 xor.data
 log.txt
-models
 # C extensions
 *.so
 
