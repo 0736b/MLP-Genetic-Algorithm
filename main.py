@@ -36,26 +36,26 @@ def main():
         cfm_valid.print()
         print('Accuracy:', cfm_valid.get_accuracy())
         # saving model, training log
-        path_model = 'models/'+ model + '/best_fold_' + str(i+1) + '.data'
-        path_mse_avg = 'models/' + model + '/ga/mse_avg_fold_' + str(i+1) + '.data'
-        path_mse_best = 'models/' + model + '/ga/mse_best_fold_' + str(i+1) + '.data'
-        path_cfm_train = 'models/' + model + '/cfm/train_fold_' + str(i+1) + '.data'
-        path_cfm_valid = 'models/' + model + '/cfm/valid_fold_' + str(i+1) + '.data'
-        with open(path_model, 'wb') as fm:
-            pickle.dump(best, fm)
-        with open(path_mse_avg, 'wb') as favg:
-            pickle.dump(log_mse_avg, favg)
-        with open(path_mse_best, 'wb') as fbest:
-            pickle.dump(log_mse_best, fbest)
-        with open(path_cfm_train, 'wb') as fcfm_train:
-            pickle.dump(cfm_train, fcfm_train)
-        with open(path_cfm_valid, 'wb') as fcfm_valid:
-            pickle.dump(cfm_valid, fcfm_valid)
-        fm.close()
-        favg.close()
-        fbest.close()
-        fcfm_train.close()
-        fcfm_valid.close()
+        # path_model = 'models/'+ model + '/best_fold_' + str(i+1) + '.data'
+        # path_mse_avg = 'models/' + model + '/ga/mse_avg_fold_' + str(i+1) + '.data'
+        # path_mse_best = 'models/' + model + '/ga/mse_best_fold_' + str(i+1) + '.data'
+        # path_cfm_train = 'models/' + model + '/cfm/train_fold_' + str(i+1) + '.data'
+        # path_cfm_valid = 'models/' + model + '/cfm/valid_fold_' + str(i+1) + '.data'
+        # with open(path_model, 'wb') as fm:
+        #     pickle.dump(best, fm)
+        # with open(path_mse_avg, 'wb') as favg:
+        #     pickle.dump(log_mse_avg, favg)
+        # with open(path_mse_best, 'wb') as fbest:
+        #     pickle.dump(log_mse_best, fbest)
+        # with open(path_cfm_train, 'wb') as fcfm_train:
+        #     pickle.dump(cfm_train, fcfm_train)
+        # with open(path_cfm_valid, 'wb') as fcfm_valid:
+        #     pickle.dump(cfm_valid, fcfm_valid)
+        # fm.close()
+        # favg.close()
+        # fbest.close()
+        # fcfm_train.close()
+        # fcfm_valid.close()
         
 if __name__ == '__main__':
     main()

@@ -2,6 +2,7 @@ import pickle
 import matplotlib.pyplot as plt
 import seaborn as sns
 import pandas as pd
+import numpy as np
 from utils.datareader import get_dataset, cross_valid
 
 def plt_err_trained(model, gen):
@@ -74,11 +75,74 @@ def plt_cfm(color, mode, model):
         plt.suptitle('MLP ' + model + ' train with GA' + '\nConfusion Matrix (' + mode_text + ')', fontweight='bold', fontsize=24)
         plt.title('Fold ' + on_fold + ' Accuracy: ' + acc, fontweight='bold')
     plt.subplots_adjust(left=0.06,bottom=0.14,right=0.97,top=0.788,wspace=0.29,hspace=0.51)
-    plt.show() 
-        
+    plt.show()
+    
+def plt_all_mse(max_gen):
+    """plot all model mse converge on fold that has highest accuracy
+
+    Args:
+        max_gen (int): max generation
+    """
+    gen = max_gen
+    idx_gen = [int(i+1) for i in range(gen)]
+    bf41 = '6'
+    bf81 = '5'
+    bf841 = '4'
+    path_4_1_avg = 'models/' + '30-4-1' + '/ga/mse_avg_fold_' + bf41 + '.data'
+    path_4_1_best = 'models/' + '30-4-1' + '/ga/mse_best_fold_' + bf41 + '.data'
+    path_8_1_avg = 'models/' + '30-8-1' + '/ga/mse_avg_fold_' + bf81 + '.data'
+    path_8_1_best = 'models/' + '30-8-1' + '/ga/mse_best_fold_' + bf81 + '.data'
+    path_8_4_1_avg = 'models/' + '30-8-4-1' + '/ga/mse_avg_fold_' + bf841 + '.data'
+    path_8_4_1_best = 'models/' + '30-8-4-1' + '/ga/mse_best_fold_' + bf841 + '.data'
+    with open(path_4_1_avg, 'rb') as f_4_1_avg:
+        log_mse_avg_4_1 = pickle.load(f_4_1_avg)
+    with open(path_4_1_best, 'rb') as f_4_1_best:
+        log_mse_best_4_1 = pickle.load(f_4_1_best)
+    with open(path_8_1_avg, 'rb') as f_8_1_avg:
+        log_mse_avg_8_1 = pickle.load(f_8_1_avg)
+    with open(path_8_1_best, 'rb') as f_8_1_best:
+        log_mse_best_8_1 = pickle.load(f_8_1_best)
+    with open(path_8_4_1_avg, 'rb') as f_8_4_1_avg:
+        log_mse_avg_8_4_1 = pickle.load(f_8_4_1_avg)
+    with open(path_8_4_1_best, 'rb') as f_8_4_1_best:
+        log_mse_best_8_4_1 = pickle.load(f_8_4_1_best)
+    # min_81 = np.amin(log_mse_avg_8_1)
+    # max_81 = np.amax(log_mse_avg_8_1)
+    # min_81_p = [float(min_81) for i in range(gen)]
+    # max_81_p = [float(max_81) for i in range(gen)]
+    mse_train_avg41 = pd.DataFrame(log_mse_avg_4_1, index=idx_gen, columns=['30-4-1 Average MSE of All Population'])
+    mse_train_best41 = pd.DataFrame(log_mse_best_4_1, index=idx_gen, columns=['30-4-1 MSE of Fittest Individual'])
+    mse_train_avg41.index.name = 'Generations'
+    mse_train_best41.index.name = 'Generations'
+    mse_train_avg81 = pd.DataFrame(log_mse_avg_8_1, index=idx_gen, columns=['30-8-1 Average MSE of All Population'])
+    mse_train_best81 = pd.DataFrame(log_mse_best_8_1, index=idx_gen, columns=['30-8-1 MSE of Fittest Individual'])
+    mse_train_avg81.index.name = 'Generations'
+    mse_train_best81.index.name = 'Generations'
+    mse_train_avg841 = pd.DataFrame(log_mse_avg_8_4_1, index=idx_gen, columns=['30-8-4-1 Average MSE of All Population'])
+    mse_train_best841 = pd.DataFrame(log_mse_best_8_4_1, index=idx_gen, columns=['30-8-4-1 MSE of Fittest Individual'])
+    mse_train_avg841.index.name = 'Generations'
+    mse_train_best841.index.name = 'Generations'
+    # min_81_data = pd.DataFrame(min_81_p, index=idx_gen, columns=[''])
+    # max_81_data = pd.DataFrame(max_81_p, index=idx_gen, columns=[''])
+    sns.lineplot(data=mse_train_avg41, linewidth='2.5', palette=['red']).lines[0].set_linestyle("dotted")
+    sns.lineplot(data=mse_train_avg81, linewidth='2.5', palette=['blue'])
+    sns.lineplot(data=mse_train_avg841, linewidth='2.5', palette=['green']).lines[2].set_linestyle("dotted")
+    sns.lineplot(data=mse_train_best41, linewidth='2.5', palette=['red'])
+    sns.lineplot(data=mse_train_best81, linewidth='2.5', palette=['blue'])
+    sns.lineplot(data=mse_train_best841, linewidth='2.5', palette=['green']).lines[4].set_linestyle("dotted")
+    # sns.lineplot(data=min_81_data, palette=['blue'])
+    # sns.lineplot(data=max_81_data, palette=['blue'])
+    plt.ylabel('Mean Square Error (MSE)', fontsize=18)
+    plt.xlabel('Generations', fontsize=18)
+    plt.legend(loc='lower right', bbox_to_anchor=(1, 0.15))
+    plt.title('30-4-1, 30-8-1, 30-8-4-1 Models\nMSE Converge', fontweight='bold', fontsize=24)
+    plt.show()
+    
+    
 if __name__ == '__main__':
     max_gen = 100
-    model = '30-4-1'
+    model = '30-8-4-1'
     plt_err_trained(model, max_gen)
     plt_cfm('Blues', 'train', model)
     plt_cfm('YlOrBr', 'valid', model)
+    # plt_all_mse(max_gen)
