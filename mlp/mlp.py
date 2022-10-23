@@ -54,14 +54,15 @@ class MLP:
         mse = sse / len(dataset)
         return mse
     
-    def run_show(self, dataset):
+    def run_show(self, dataset, cfm):
         sse = 0.0
         acc = 0.0
         for train_data in dataset:
             self.forward_pass(train_data['INPUT'])
             error,desired_output = self.calc_error(train_data['OUTPUT'])
             sse = sse + error
-            print('actual_output:',self.layers['OUTPUT_LAYER'][0].get_output(), 'desired_output:', desired_output[0])
+            cfm.add_data(desired_output[0], self.layers['OUTPUT_LAYER'][0].get_output())
+            # print('actual_output:',self.layers['OUTPUT_LAYER'][0].get_output(), 'desired_output:', desired_output[0])
             if self.layers['OUTPUT_LAYER'][0].get_output() == desired_output[0]:
                 acc += 1
         mse = sse / len(dataset)

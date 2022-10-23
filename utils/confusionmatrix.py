@@ -27,7 +27,17 @@ class ConfusionMatrix:
                 self.column[2] += 1
             self.accuracy = float((self.column[0] + self.column[3]) / len(self.actual))
             self.misclass = float((self.column[1] + self.column[2]) / len(self.actual))
-            
+    
+    def print(self):
+        print('                             Predicted')
+        print('                        +--------+--------+')
+        print('                        |',self.all_output[0],'|', self.all_output[1],'|')
+        print('               +--------+--------+--------+')
+        print('               |', self.all_output[0], '|  ', self.column[0], '      ', self.column[1], '      ')
+        print('      Actual   +--------+')
+        print('               |', self.all_output[1], '|  ', self.column[2], '      ', self.column[3], '      ')
+        print('               +--------+')
+        
     def get_accuracy(self):
         return self.accuracy
     
