@@ -98,7 +98,6 @@ class MLP:
             error,desired_output = self.calc_error(train_data['OUTPUT'])
             sse = sse + error
             cfm.add_data(desired_output[0], self.layers['OUTPUT_LAYER'][0].get_output())
-            # print('actual_output:',self.layers['OUTPUT_LAYER'][0].get_output(), 'desired_output:', desired_output[0])
             if self.layers['OUTPUT_LAYER'][0].get_output() == desired_output[0]:
                 acc += 1
         mse = sse / len(dataset)
@@ -129,7 +128,6 @@ class MLP:
             chromosome (list): new chromosome
         """
         linear_chromosome = chromosome
-        # print('UPDATE WITH', linear_chromosome)
         for layer, neurons in self.layers.items():
             if 'HIDDEN_LAYER' in layer or 'OUTPUT_LAYER' in layer:
                 for neuron in neurons:
