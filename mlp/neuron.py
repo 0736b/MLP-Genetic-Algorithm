@@ -1,6 +1,14 @@
 import numpy as np
 
 def step(x):
+    """unit step function activation function for mlp
+
+    Args:
+        x (list): input values
+
+    Returns:
+        list: output if x > 0 is 1 else 0
+    """
     return np.where(x>0, 1,0)
 
 class Neuron:
