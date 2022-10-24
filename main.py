@@ -13,12 +13,12 @@ def main():
     max_gen = 100
     population = 20
     for i in range(folds):
-        model = '30-8-4-1'
+        model = '30-4-1'
         cfm_train = ConfusionMatrix([0,1])
         cfm_valid = ConfusionMatrix([0,1])
         print('Fold:', (i+1), 'Training')
         st = time.time()
-        ga = GA(population, train_folds[i], max_gen, [30, 8, 4, 1])
+        ga = GA(population, train_folds[i], max_gen, [30, 4, 1])
         best, log_mse_avg, log_mse_best = ga.run()
         et = time.time()
         elapsed_time = et - st

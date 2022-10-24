@@ -1,5 +1,4 @@
 import csv
-from sklearn import preprocessing
 import numpy as np
 import random
 
@@ -22,11 +21,10 @@ def get_dataset(path, norm=False):
             inputs.pop(0)
             inputs.pop(0)
             inputs = [float(f) for f in inputs]
-            inputs_norm = np.array(inputs)
-            inputs_norm = preprocessing.normalize([inputs_norm])[0]
+            normed = normalize(inputs)
             outputs = []
             if norm:
-                data['INPUT'] = inputs_norm
+                data['INPUT'] = normed
             elif not norm:
                 data['INPUT'] = inputs
             if row[1] == 'M':
@@ -89,3 +87,15 @@ def cross_valid(dataset):
         train_dataset_folds.append(sum_fold_train)
         test_dataset_folds.append(fold_test)
     return train_dataset_folds, test_dataset_folds
+
+def normalize(data):
+    """min-max normalization
+
+    Args:
+        data (list): dataset
+
+    Returns:
+        list: normalized dataset
+    """
+    norm = [(float(i) - min(data)) / (max(data) - min(data)) for i in data]
+    return norm
